@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prove Identity V2 - Pre-fill POC</title>
+    <link rel="stylesheet" href="styles.css">
+    <script id="glance-cobrowse" charset="UTF-8" type="text/javascript" src="https://www.glancecdn.net/cobrowse/CobrowseJS.ashx?group=21223&site=staging" data-groupid="21223" data-site="staging" data-ws="www.glance.net" data-presence="on" data-cookietype="normal"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐋 Prove Identity V2 - Pre-fill POC</h1>
+            <p>Proof of Concept: Identity Verification & Form Pre-fill | <em>Moby Dick Theme: Captain Ahab</em></p>
+        </header>
+        
+        <main>
+            <div class="info-banner">
+                <p>🐋 <strong>Moby Dick Theme:</strong> Testing with Captain Ahab's identity | <strong>API Reference:</strong> <a href="https://docs.prove.com/customer/reference/identityv2" target="_blank">Prove Identity V2 Documentation</a></p>
+            </div>
+
+            <div class="form-section">
+                <div class="form-header">
+                    <h2>User Information Form</h2>
+                    <button id="prefillBtn" class="btn-primary">
+                        <span class="btn-icon">✨</span>
+                        Pre-fill with Prove Identity
+                    </button>
+                </div>
+
+                <form id="userForm" class="user-form">
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <small>Enter phone number to verify Captain Ahab's identity (use 555 or 123 for success)</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Street Address</label>
+                        <input type="text" id="address" name="address">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state">
+                        </div>
+                        <div class="form-group">
+                            <label for="zipCode">ZIP Code</label>
+                            <input type="text" id="zipCode" name="zipCode">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ssn">SSN (Last 4 digits)</label>
+                        <input type="text" id="ssn" name="ssn" maxlength="4">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="occupation">Occupation</label>
+                        <input type="text" id="occupation" name="occupation" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vessel">
+                            Vessel
+                            <a href="#" class="help-link" onclick="event.preventDefault(); openVesselModal();">I don't understand this field</a>
+                        </label>
+                        <input type="text" id="vessel" name="vessel" readonly>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Submit Form</button>
+                        <button type="button" class="btn-clear" onclick="clearForm()">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="statusMessage" class="status-message" style="display: none;"></div>
+
+            <div class="api-info">
+                <h3>API Integration Details</h3>
+                <div class="api-details">
+                    <div class="api-item">
+                        <strong>Endpoint:</strong> <code>/api/prove/identity/v2</code>
+                    </div>
+                    <div class="api-item">
+                        <strong>Method:</strong> <code>POST</code>
+                    </div>
+                    <div class="api-item">
+                        <strong>Request:</strong> Phone number for identity verification
+                    </div>
+                    <div class="api-item">
+                        <strong>Response:</strong> Verified user data for pre-fill
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Vessel Understanding Modal -->
+    <div id="vesselModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Understanding Vessels</h2>
+                <button class="modal-close" onclick="closeVesselModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>A vessel refers to the ship or boat that a person is associated with, particularly in maritime professions like whaling, fishing, or shipping.</p>
+                
+                <h3>Types of Vessels:</h3>
+                <ul>
+                    <li><strong>Whaling Ships:</strong> Large vessels designed for hunting whales, like the Pequod in Moby Dick</li>
+                    <li><strong>Fishing Boats:</strong> Smaller vessels used for commercial or recreational fishing</li>
+                    <li><strong>Cargo Ships:</strong> Large vessels that transport goods across oceans</li>
+                    <li><strong>Passenger Ships:</strong> Vessels designed to carry people, such as cruise ships or ferries</li>
+                    <li><strong>Naval Vessels:</strong> Military ships used by navies for defense and operations</li>
+                    <li><strong>Yachts:</strong> Private recreational boats, often luxurious</li>
+                </ul>
+                
+                <p>In the context of identity verification, the vessel field helps establish a person's maritime profession or association with a specific ship.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-expert" onclick="talkToExpert()">Talk to an Expert</button>
+                <button class="btn-close-modal" onclick="closeVesselModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
