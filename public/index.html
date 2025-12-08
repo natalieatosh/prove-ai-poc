@@ -103,21 +103,136 @@
 
             <div id="statusMessage" class="status-message" style="display: none;"></div>
 
+            <!-- Feature Sections -->
+            <div class="features-grid">
+                <!-- 1. SMS Authentication / OTP -->
+                <div class="feature-card">
+                    <h3>📱 1. SMS Authentication / OTP</h3>
+                    <div class="feature-content">
+                        <input type="tel" id="otpPhone" placeholder="Enter phone number" class="feature-input">
+                        <div class="feature-actions">
+                            <button onclick="sendOTP()" class="btn-feature">Send OTP</button>
+                            <input type="text" id="otpCode" placeholder="Enter OTP code" class="feature-input" maxlength="6" style="display: none;">
+                            <button onclick="verifyOTP()" class="btn-feature" id="verifyOtpBtn" style="display: none;">Verify OTP</button>
+                        </div>
+                        <div id="otpResult" class="feature-result"></div>
+                    </div>
+                </div>
+
+                <!-- 2. Trust Score -->
+                <div class="feature-card">
+                    <h3>🛡️ 2. Trust Score</h3>
+                    <div class="feature-content">
+                        <input type="tel" id="trustScorePhone" placeholder="Enter phone number" class="feature-input">
+                        <button onclick="getTrustScore()" class="btn-feature">Get Trust Score</button>
+                        <div id="trustScoreResult" class="feature-result"></div>
+                    </div>
+                </div>
+
+                <!-- 3. Phone Authentication -->
+                <div class="feature-card">
+                    <h3>☎️ 3. Phone Authentication</h3>
+                    <div class="feature-content">
+                        <input type="tel" id="phoneAuthPhone" placeholder="Enter phone number" class="feature-input">
+                        <button onclick="authenticatePhone()" class="btn-feature">Authenticate Phone</button>
+                        <div id="phoneAuthResult" class="feature-result"></div>
+                    </div>
+                </div>
+
+                <!-- 4. Selfie Comparison + Liveness -->
+                <div class="feature-card">
+                    <h3>📸 4. Selfie Comparison + Liveness</h3>
+                    <div class="feature-content">
+                        <div class="image-upload-section">
+                            <label>Selfie Image:</label>
+                            <input type="file" id="selfieImage" accept="image/*" class="feature-input">
+                            <label>ID Image:</label>
+                            <input type="file" id="idImage" accept="image/*" class="feature-input">
+                        </div>
+                        <div class="feature-actions">
+                            <button onclick="checkLiveness()" class="btn-feature">Check Liveness</button>
+                            <button onclick="compareSelfie()" class="btn-feature">Compare with ID</button>
+                        </div>
+                        <div id="selfieResult" class="feature-result"></div>
+                    </div>
+                </div>
+
+                <!-- 5. Knowledge-Based Authentication (KBA) -->
+                <div class="feature-card">
+                    <h3>❓ 5. Knowledge-Based Authentication (KBA)</h3>
+                    <div class="feature-content">
+                        <input type="tel" id="kbaPhone" placeholder="Enter phone number" class="feature-input">
+                        <button onclick="generateKBA()" class="btn-feature">Generate KBA Questions</button>
+                        <div id="kbaQuestions" class="feature-result"></div>
+                        <div id="kbaResult" class="feature-result"></div>
+                    </div>
+                </div>
+
+                <!-- 6. Credential Analysis -->
+                <div class="feature-card">
+                    <h3>🆔 6. Credential Analysis</h3>
+                    <div class="feature-content">
+                        <select id="idType" class="feature-input">
+                            <option value="driver_license">Driver's License</option>
+                            <option value="passport">Passport</option>
+                            <option value="state_id">State ID</option>
+                        </select>
+                        <input type="file" id="credentialImage" accept="image/*" class="feature-input">
+                        <button onclick="analyzeCredential()" class="btn-feature">Analyze Credential</button>
+                        <div id="credentialResult" class="feature-result"></div>
+                    </div>
+                </div>
+
+                <!-- 7. AAMVA Check -->
+                <div class="feature-card">
+                    <h3>🚗 7. AAMVA Check (DMV Verification)</h3>
+                    <div class="feature-content">
+                        <input type="text" id="licenseNumber" placeholder="License Number" class="feature-input">
+                        <input type="text" id="licenseState" placeholder="State (e.g., MA)" class="feature-input">
+                        <input type="date" id="licenseDob" class="feature-input">
+                        <button onclick="verifyAAMVA()" class="btn-feature">Verify with DMV</button>
+                        <div id="aamvaResult" class="feature-result"></div>
+                    </div>
+                </div>
+
+                <!-- 8. Multi-Factor Authentication (MFA) -->
+                <div class="feature-card">
+                    <h3>🔐 8. Multi-Factor Authentication (MFA)</h3>
+                    <div class="feature-content">
+                        <input type="tel" id="mfaPhone" placeholder="Enter phone number" class="feature-input">
+                        <button onclick="initiateMFA()" class="btn-feature">Initiate MFA</button>
+                        <div id="mfaResult" class="feature-result"></div>
+                    </div>
+                </div>
+
+                <!-- 9. Phone Number Intelligence -->
+                <div class="feature-card">
+                    <h3>📊 9. Phone Number Intelligence</h3>
+                    <div class="feature-content">
+                        <input type="tel" id="intelPhone" placeholder="Enter phone number" class="feature-input">
+                        <button onclick="getPhoneIntelligence()" class="btn-feature">Get Intelligence</button>
+                        <div id="intelResult" class="feature-result"></div>
+                    </div>
+                </div>
+            </div>
+
             <div class="api-info">
-                <h3>API Integration Details</h3>
+                <h3>📡 All API Endpoints</h3>
                 <div class="api-details">
-                    <div class="api-item">
-                        <strong>Endpoint:</strong> <code>/api/prove/identity/v2</code>
-                    </div>
-                    <div class="api-item">
-                        <strong>Method:</strong> <code>POST</code>
-                    </div>
-                    <div class="api-item">
-                        <strong>Request:</strong> Phone number for identity verification
-                    </div>
-                    <div class="api-item">
-                        <strong>Response:</strong> Verified user data for pre-fill
-                    </div>
+                    <div class="api-item"><strong>Identity V2:</strong> <code>POST /api/prove/identity/v2</code></div>
+                    <div class="api-item"><strong>SMS OTP Send:</strong> <code>POST /api/prove/sms/send-otp</code></div>
+                    <div class="api-item"><strong>SMS OTP Verify:</strong> <code>POST /api/prove/sms/verify-otp</code></div>
+                    <div class="api-item"><strong>Trust Score:</strong> <code>POST /api/prove/trust-score</code></div>
+                    <div class="api-item"><strong>Phone Auth:</strong> <code>POST /api/prove/phone/authenticate</code></div>
+                    <div class="api-item"><strong>Selfie Compare:</strong> <code>POST /api/prove/selfie/compare</code></div>
+                    <div class="api-item"><strong>Liveness Check:</strong> <code>POST /api/prove/selfie/liveness</code></div>
+                    <div class="api-item"><strong>KBA Generate:</strong> <code>POST /api/prove/kba/generate</code></div>
+                    <div class="api-item"><strong>KBA Verify:</strong> <code>POST /api/prove/kba/verify</code></div>
+                    <div class="api-item"><strong>Credential Analysis:</strong> <code>POST /api/prove/credential/analyze</code></div>
+                    <div class="api-item"><strong>AAMVA Check:</strong> <code>POST /api/prove/aamva/verify</code></div>
+                    <div class="api-item"><strong>MFA Initiate:</strong> <code>POST /api/prove/mfa/initiate</code></div>
+                    <div class="api-item"><strong>MFA Verify:</strong> <code>POST /api/prove/mfa/verify</code></div>
+                    <div class="api-item"><strong>Phone Intelligence:</strong> <code>POST /api/prove/phone/intelligence</code></div>
                 </div>
             </div>
         </main>
