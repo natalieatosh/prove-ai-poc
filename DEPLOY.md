@@ -70,5 +70,5 @@
 
 - The app uses port 3005 locally, but Render/Vercel will set the PORT environment variable automatically
 - Your Glance cobrowse script will work once deployed to a public URL
-- Make sure your Glance group ID (21223) and site (staging) are correct for production
+- Make sure your Glance group ID (24504) and site (staging) are correct for production
 
