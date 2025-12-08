@@ -7,11 +7,14 @@ const PORT = process.env.PORT || 3005;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+
+// Serve static files - handle both local and Vercel environments
+const publicPath = path.join(__dirname, 'public');
+app.use(express.static(publicPath));
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.get('/health', (req, res) => {
@@ -627,24 +630,31 @@ app.post('/api/prove/phone/intelligence', async (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Prove AI POC server running on http://localhost:${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
-  console.log(`Frontend: http://localhost:${PORT}`);
-  console.log(`\n📡 API Endpoints:`);
-  console.log(`  - Identity V2: POST /api/prove/identity/v2`);
-  console.log(`  - SMS OTP Send: POST /api/prove/sms/send-otp`);
-  console.log(`  - SMS OTP Verify: POST /api/prove/sms/verify-otp`);
-  console.log(`  - Trust Score: POST /api/prove/trust-score`);
-  console.log(`  - Phone Auth: POST /api/prove/phone/authenticate`);
-  console.log(`  - Selfie Compare: POST /api/prove/selfie/compare`);
-  console.log(`  - Liveness Check: POST /api/prove/selfie/liveness`);
-  console.log(`  - KBA Generate: POST /api/prove/kba/generate`);
-  console.log(`  - KBA Verify: POST /api/prove/kba/verify`);
-  console.log(`  - Credential Analysis: POST /api/prove/credential/analyze`);
-  console.log(`  - AAMVA Check: POST /api/prove/aamva/verify`);
-  console.log(`  - MFA Initiate: POST /api/prove/mfa/initiate`);
-  console.log(`  - MFA Verify: POST /api/prove/mfa/verify`);
-  console.log(`  - Phone Intelligence: POST /api/prove/phone/intelligence`);
-});
+// Export for Vercel serverless functions
+// Vercel will use this as the handler
+module.exports = app;
+
+// Only start server if running locally (not on Vercel)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Prove AI POC server running on http://localhost:${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/health`);
+    console.log(`Frontend: http://localhost:${PORT}`);
+    console.log(`\n📡 API Endpoints:`);
+    console.log(`  - Identity V2: POST /api/prove/identity/v2`);
+    console.log(`  - SMS OTP Send: POST /api/prove/sms/send-otp`);
+    console.log(`  - SMS OTP Verify: POST /api/prove/sms/verify-otp`);
+    console.log(`  - Trust Score: POST /api/prove/trust-score`);
+    console.log(`  - Phone Auth: POST /api/prove/phone/authenticate`);
+    console.log(`  - Selfie Compare: POST /api/prove/selfie/compare`);
+    console.log(`  - Liveness Check: POST /api/prove/selfie/liveness`);
+    console.log(`  - KBA Generate: POST /api/prove/kba/generate`);
+    console.log(`  - KBA Verify: POST /api/prove/kba/verify`);
+    console.log(`  - Credential Analysis: POST /api/prove/credential/analyze`);
+    console.log(`  - AAMVA Check: POST /api/prove/aamva/verify`);
+    console.log(`  - MFA Initiate: POST /api/prove/mfa/initiate`);
+    console.log(`  - MFA Verify: POST /api/prove/mfa/verify`);
+    console.log(`  - Phone Intelligence: POST /api/prove/phone/intelligence`);
+  });
+}
 
