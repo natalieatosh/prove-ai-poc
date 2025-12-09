@@ -21,6 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         form.addEventListener('submit', handleFormSubmit);
     }
+    
+    // Auto-trigger pre-fill when page loads
+    if (phoneInput) {
+        // Set the phone number from welcome page (555-555-5555)
+        phoneInput.value = '555-555-5555';
+        // Automatically trigger pre-fill after a short delay to ensure page is ready
+        setTimeout(() => {
+            handlePreFill();
+        }, 500);
+    }
 });
 
 async function handlePreFill() {
