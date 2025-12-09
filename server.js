@@ -25,6 +25,14 @@ app.get('/form.html', (req, res) => {
   res.sendFile(path.join(publicPath, 'form.html')); // Main form page (alternative route)
 });
 
+app.get('/completion', (req, res) => {
+  res.sendFile(path.join(publicPath, 'completion.html')); // Completion page
+});
+
+app.get('/completion.html', (req, res) => {
+  res.sendFile(path.join(publicPath, 'completion.html')); // Completion page (alternative route)
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'Prove AI POC' });
 });

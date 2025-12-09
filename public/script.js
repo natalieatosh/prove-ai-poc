@@ -121,10 +121,12 @@ function handleFormSubmit(e) {
     const data = Object.fromEntries(formData);
     
     console.log('Form submitted:', data);
-    showStatus('✅ Form submitted successfully!', 'success');
     
     // In a real application, you would send this data to your backend
     // fetch('/api/submit', { method: 'POST', body: JSON.stringify(data) });
+    
+    // Redirect to completion page
+    window.location.href = '/completion';
 }
 
 function clearForm() {

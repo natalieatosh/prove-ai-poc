@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Complete - Nautical Small Business Loan</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .completion-container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 50px 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .completion-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .completion-message {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .completion-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-schedule, .btn-no-thanks {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+        
+        .btn-schedule {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-schedule:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-no-thanks {
+            background: #f5f5f5;
+            color: #666;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .btn-no-thanks:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        .btn-schedule:active, .btn-no-thanks:active {
+            transform: translateY(0);
+        }
+    </style>
+    <script id="glance-cobrowse" charset="UTF-8" type="text/javascript" src="https://www.glancecdn.net/cobrowse/CobrowseJS.ashx?group=24504&site=staging" data-groupid="24504" data-site="staging" data-ws="www.glance.net" data-presence="on" data-cookietype="normal" data-cookiedomain="prove-ai-poc-git-main-natalieatoshs-projects.vercel.app" data-visitorid="555-555-5555" async onerror="console.warn('Glance script failed to load');"></script>
+</head>
+<body>
+    <div class="completion-container">
+        <div class="completion-icon">🎉</div>
+        <h1 class="completion-title">Congrats, Matey!</h1>
+        <p class="completion-message">You're almost there. Do you want to schedule a follow-up call with a representative?</p>
+        
+        <div class="completion-actions">
+            <button class="btn-schedule" onclick="scheduleCall()">Schedule</button>
+            <button class="btn-no-thanks" onclick="noThanks()">No thanks</button>
+        </div>
+    </div>
+
+    <script>
+        // Error handler for Glance script errors
+        window.addEventListener('error', function(e) {
+            if (e.message && e.message.includes("Cannot read properties of null")) {
+                console.warn('Glance script initialization warning (non-critical):', e.message);
+                e.preventDefault();
+                return true;
+            }
+        }, true);
+
+        function scheduleCall() {
+            // In a real application, this would open a scheduling interface
+            alert('Scheduling feature coming soon! A representative will contact you shortly.');
+            // Could redirect to a scheduling page or open a modal
+        }
+
+        function noThanks() {
+            // In a real application, this might save the preference and show a thank you message
+            alert('Thank you! Your application has been submitted successfully.');
+            // Could redirect to home or show a final message
+        }
+    </script>
+</body>
+</html>
+
