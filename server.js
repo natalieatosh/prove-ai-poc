@@ -33,6 +33,14 @@ app.get('/completion.html', (req, res) => {
   res.sendFile(path.join(publicPath, 'completion.html')); // Completion page (alternative route)
 });
 
+app.get('/schedule', (req, res) => {
+  res.sendFile(path.join(publicPath, 'schedule.html')); // Schedule page
+});
+
+app.get('/schedule.html', (req, res) => {
+  res.sendFile(path.join(publicPath, 'schedule.html')); // Schedule page (alternative route)
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'Prove AI POC' });
 });
@@ -646,6 +654,130 @@ app.post('/api/prove/phone/intelligence', async (req, res) => {
   });
 });
 
+// Schedule Call API Endpoint
+app.post('/api/schedule', async (req, res) => {
+  const { date, time, email, name, phone, notes } = req.body;
+
+  if (!date || !time || !email || !name || !phone) {
+    return res.status(400).json({
+      success: false,
+      message: 'All required fields must be provided'
+    });
+  }
+
+  await new Promise(resolve => setTimeout(resolve, 1500));
+
+  // Parse date and time
+  const [year, month, day] = date.split('-').map(Number);
+  const [timeStr, period] = time.split(' ');
+  const [hours, minutes] = timeStr.split(':');
+  let hour24 = parseInt(hours);
+  if (period === 'PM' && hour24 !== 12) hour24 += 12;
+  if (period === 'AM' && hour24 === 12) hour24 = 0;
+
+  const scheduledDateTime = new Date(year, month - 1, day, hour24, parseInt(minutes));
+  const endDateTime = new Date(scheduledDateTime);
+  endDateTime.setMinutes(endDateTime.getMinutes() + 30); // 30-minute call
+
+  // Format for display
+  const formattedDate = scheduledDateTime.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  const formattedTime = scheduledDateTime.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+  const formattedDateTime = `${formattedDate} at ${formattedTime}`;
+
+  // Generate calendar file (.ics)
+  const calendarContent = generateICSFile({
+    start: scheduledDateTime,
+    end: endDateTime,
+    summary: 'Nautical Small Business Loan - Follow-up Call',
+    description: notes || 'Follow-up call to discuss your loan application',
+    location: 'Phone Call',
+    organizer: { email: 'representative@nauticalloan.com', name: 'Loan Representative' },
+    attendee: { email: email, name: name }
+  });
+
+  // In production, you would:
+  // 1. Send email to customer
+  // 2. Send email to representative
+  // 3. Store in database
+  // 4. Integrate with calendar service (Google Calendar, Outlook, etc.)
+
+  // Mock email sending
+  console.log('📧 Email sent to customer:', email);
+  console.log('📧 Email sent to representative: representative@nauticalloan.com');
+  console.log('📅 Calendar event created for:', formattedDateTime);
+
+  // Return calendar file as base64 data URL
+  const calendarBase64 = Buffer.from(calendarContent).toString('base64');
+  const calendarDataUrl = `data:text/calendar;charset=utf-8;base64,${calendarBase64}`;
+
+  res.json({
+    success: true,
+    message: 'Call scheduled successfully',
+    formattedDateTime: formattedDateTime,
+    scheduledDateTime: scheduledDateTime.toISOString(),
+    calendarUrl: calendarDataUrl,
+    calendarLinks: `
+      <br><small>📥 <a href="${calendarDataUrl}" download="call-schedule.ics" style="color: #667eea;">Download Calendar Invite</a></small>
+    `,
+    emails: {
+      customer: email,
+      representative: 'representative@nauticalloan.com'
+    }
+  });
+});
+
+// Helper function to generate .ics calendar file
+function generateICSFile({ start, end, summary, description, location, organizer, attendee }) {
+  const formatDate = (date) => {
+    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  };
+
+  const escapeText = (text) => {
+    return text.replace(/\\/g, '\\\\')
+               .replace(/,/g, '\\,')
+               .replace(/;/g, '\\;')
+               .replace(/\n/g, '\\n');
+  };
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Nautical Small Business Loan//Schedule Call//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:REQUEST',
+    'BEGIN:VEVENT',
+    `UID:${Date.now()}@nauticalloan.com`,
+    `DTSTAMP:${formatDate(new Date())}`,
+    `DTSTART:${formatDate(start)}`,
+    `DTEND:${formatDate(end)}`,
+    `SUMMARY:${escapeText(summary)}`,
+    `DESCRIPTION:${escapeText(description)}`,
+    `LOCATION:${escapeText(location)}`,
+    `ORGANIZER;CN=${escapeText(organizer.name)}:MAILTO:${organizer.email}`,
+    `ATTENDEE;CN=${escapeText(attendee.name)};RSVP=TRUE:MAILTO:${attendee.email}`,
+    'STATUS:CONFIRMED',
+    'SEQUENCE:0',
+    'BEGIN:VALARM',
+    'TRIGGER:-PT15M',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Reminder: Call in 15 minutes',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  return ics;
+}
+
 // Export for Vercel serverless functions
 // Vercel will use this as the handler
 module.exports = app;
@@ -671,6 +803,7 @@ if (!process.env.VERCEL) {
     console.log(`  - MFA Initiate: POST /api/prove/mfa/initiate`);
     console.log(`  - MFA Verify: POST /api/prove/mfa/verify`);
     console.log(`  - Phone Intelligence: POST /api/prove/phone/intelligence`);
+    console.log(`  - Schedule Call: POST /api/schedule`);
   });
 }
 

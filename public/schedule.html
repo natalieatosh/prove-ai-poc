@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule a Call - Nautical Small Business Loan</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .schedule-container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .schedule-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .schedule-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .schedule-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .form-section label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .form-section input,
+        .form-section select {
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-section input:focus,
+        .form-section select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .calendar-picker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .calendar-header {
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+            padding: 10px;
+            font-size: 14px;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .calendar-day:hover:not(.disabled):not(.selected) {
+            background: #f0f0f0;
+            border-color: #667eea;
+        }
+        
+        .calendar-day.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            background: #f9f9f9;
+        }
+        
+        .calendar-day.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            font-weight: 600;
+        }
+        
+        .calendar-day.today {
+            border-color: #4caf50;
+            font-weight: 600;
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .time-slot {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+            font-size: 14px;
+        }
+        
+        .time-slot:hover:not(.selected) {
+            border-color: #667eea;
+            background: #f0f0f0;
+        }
+        
+        .time-slot.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            font-weight: 600;
+        }
+        
+        .time-slot.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            background: #f9f9f9;
+        }
+        
+        .btn-schedule-submit {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .btn-schedule-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-schedule-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .schedule-status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .schedule-status.show {
+            display: block;
+        }
+        
+        .schedule-status.success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        
+        .schedule-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .month-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .month-nav-btn {
+            background: #f5f5f5;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .month-nav-btn:hover {
+            background: #e0e0e0;
+        }
+        
+        .current-month {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+    </style>
+    <script id="glance-cobrowse" charset="UTF-8" type="text/javascript" src="https://www.glancecdn.net/cobrowse/CobrowseJS.ashx?group=24504&site=staging" data-groupid="24504" data-site="staging" data-ws="www.glance.net" data-presence="on" data-cookietype="normal" data-cookiedomain="prove-ai-poc-git-main-natalieatoshs-projects.vercel.app" data-visitorid="555-555-5555" async onerror="console.warn('Glance script failed to load');"></script>
+</head>
+<body>
+    <div class="schedule-container">
+        <h1 class="schedule-title">Schedule Your Call</h1>
+        <p class="schedule-subtitle">Choose a date and time that works for you</p>
+        
+        <form id="scheduleForm" class="schedule-form">
+            <div class="form-section">
+                <label>Select Date</label>
+                <div class="month-navigation">
+                    <button type="button" class="month-nav-btn" onclick="changeMonth(-1)">← Previous</button>
+                    <div class="current-month" id="currentMonth"></div>
+                    <button type="button" class="month-nav-btn" onclick="changeMonth(1)">Next →</button>
+                </div>
+                <div class="calendar-picker" id="calendarPicker"></div>
+                <input type="hidden" id="selectedDate" name="date" required>
+            </div>
+            
+            <div class="form-section">
+                <label>Select Time</label>
+                <div class="time-slots" id="timeSlots"></div>
+                <input type="hidden" id="selectedTime" name="time" required>
+            </div>
+            
+            <div class="form-section">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+            </div>
+            
+            <div class="form-section">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="Your full name" required>
+            </div>
+            
+            <div class="form-section">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="555-555-5555" required>
+            </div>
+            
+            <div class="form-section">
+                <label for="notes">Additional Notes (Optional)</label>
+                <input type="text" id="notes" name="notes" placeholder="Any specific topics you'd like to discuss">
+            </div>
+            
+            <div id="scheduleStatus" class="schedule-status"></div>
+            
+            <button type="submit" class="btn-schedule-submit" id="submitBtn">
+                Confirm Schedule
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Error handler for Glance script errors
+        window.addEventListener('error', function(e) {
+            if (e.message && e.message.includes("Cannot read properties of null")) {
+                console.warn('Glance script initialization warning (non-critical):', e.message);
+                e.preventDefault();
+                return true;
+            }
+        }, true);
+
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedTime = null;
+
+        const timeSlots = [
+            '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
+            '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
+            '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM',
+            '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM',
+            '5:00 PM'
+        ];
+
+        function initCalendar() {
+            renderCalendar();
+            renderTimeSlots();
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+
+            const calendar = document.getElementById('calendarPicker');
+            calendar.innerHTML = '';
+
+            // Day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-header';
+                header.textContent = day;
+                calendar.appendChild(header);
+            });
+
+            // Empty cells for days before month starts
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'calendar-day disabled';
+                calendar.appendChild(empty);
+            }
+
+            // Days of the month
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+
+                const date = new Date(year, month, day);
+                date.setHours(0, 0, 0, 0);
+
+                if (date < today) {
+                    dayElement.classList.add('disabled');
+                } else if (date.getTime() === today.getTime()) {
+                    dayElement.classList.add('today');
+                }
+
+                dayElement.addEventListener('click', () => {
+                    if (!dayElement.classList.contains('disabled')) {
+                        // Remove previous selection
+                        document.querySelectorAll('.calendar-day').forEach(d => {
+                            d.classList.remove('selected');
+                        });
+                        dayElement.classList.add('selected');
+                        selectedDate = date;
+                        document.getElementById('selectedDate').value = formatDate(date);
+                        renderTimeSlots();
+                    }
+                });
+
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function renderTimeSlots() {
+            const container = document.getElementById('timeSlots');
+            container.innerHTML = '';
+
+            if (!selectedDate) {
+                container.innerHTML = '<p style="color: #666; grid-column: 1/-1;">Please select a date first</p>';
+                return;
+            }
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const isToday = selectedDate.getTime() === today.getTime();
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            timeSlots.forEach(time => {
+                const slot = document.createElement('div');
+                slot.className = 'time-slot';
+                slot.textContent = time;
+
+                if (isToday) {
+                    const [timeStr, period] = time.split(' ');
+                    const [hours, minutes] = timeStr.split(':');
+                    let hour24 = parseInt(hours);
+                    if (period === 'PM' && hour24 !== 12) hour24 += 12;
+                    if (period === 'AM' && hour24 === 12) hour24 = 0;
+
+                    if (hour24 < currentHour || (hour24 === currentHour && parseInt(minutes) <= currentMinute)) {
+                        slot.classList.add('disabled');
+                    }
+                }
+
+                slot.addEventListener('click', () => {
+                    if (!slot.classList.contains('disabled')) {
+                        document.querySelectorAll('.time-slot').forEach(s => {
+                            s.classList.remove('selected');
+                        });
+                        slot.classList.add('selected');
+                        selectedTime = time;
+                        document.getElementById('selectedTime').value = time;
+                    }
+                });
+
+                container.appendChild(slot);
+            });
+        }
+
+        document.getElementById('scheduleForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const statusDiv = document.getElementById('scheduleStatus');
+            
+            if (!selectedDate || !selectedTime) {
+                statusDiv.textContent = 'Please select both a date and time';
+                statusDiv.className = 'schedule-status error show';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Scheduling...';
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const response = await fetch('/api/schedule', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    statusDiv.className = 'schedule-status success show';
+                    statusDiv.innerHTML = `
+                        <strong>✅ Scheduled Successfully!</strong><br>
+                        Your call has been scheduled for ${result.formattedDateTime}.<br>
+                        Calendar invites have been sent to both parties.<br>
+                        ${result.calendarLinks ? result.calendarLinks : ''}
+                    `;
+                    
+                    // Download calendar file
+                    if (result.calendarUrl) {
+                        const link = document.createElement('a');
+                        link.href = result.calendarUrl;
+                        link.download = 'call-schedule.ics';
+                        link.click();
+                    }
+                } else {
+                    statusDiv.className = 'schedule-status error show';
+                    statusDiv.textContent = result.message || 'Failed to schedule call. Please try again.';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Confirm Schedule';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.className = 'schedule-status error show';
+                statusDiv.textContent = 'Error scheduling call. Please try again.';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Confirm Schedule';
+            }
+        });
+
+        // Initialize calendar on page load
+        initCalendar();
+    </script>
+</body>
+</html>
+
