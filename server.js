@@ -14,7 +14,15 @@ app.use(express.static(publicPath));
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
+  res.sendFile(path.join(publicPath, 'index.html')); // Welcome page
+});
+
+app.get('/form', (req, res) => {
+  res.sendFile(path.join(publicPath, 'form.html')); // Main form page
+});
+
+app.get('/form.html', (req, res) => {
+  res.sendFile(path.join(publicPath, 'form.html')); // Main form page (alternative route)
 });
 
 app.get('/health', (req, res) => {
